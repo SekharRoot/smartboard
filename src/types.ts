@@ -8,7 +8,7 @@ export interface Question {
   id: number;
   chapter: Chapter;
   topic: string;
-  difficulty: 'Easy' | 'Medium-Easy';
+  difficulty: 'Very Easy' | 'Easy' | 'Medium-Easy' | 'Moderate';
   question: string;
   options: {
     label: 'A' | 'B' | 'C' | 'D';

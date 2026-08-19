@@ -28,15 +28,19 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
   if (!isOpen) return null;
 
   const topics = [
-    { label: 'All 100 Questions', value: 'ALL', range: '1–100' },
-    { label: 'Units & Dimensions', value: 'Units & Dimensions', range: '1–25' },
-    { label: 'Motion in Straight Line', value: 'Motion in a Straight Line', range: '26–60' },
-    { label: 'Simple Derivatives', value: 'Simple Derivatives', range: '61–80' },
-    { label: 'Simple Integration', value: 'Simple Integration', range: '81–100' },
+    { label: 'All 100', value: 'ALL' },
+    { label: '⚡ Rapid 30s (Q1–30)', value: 'RAPID' },
+    { label: 'Units & Dim (1–25)', value: 'Units & Dimensions' },
+    { label: 'Motion 1D (26–60)', value: 'Motion in a Straight Line' },
+    { label: 'Derivatives (61–80)', value: 'Simple Derivatives' },
+    { label: 'Integration (81–100)', value: 'Simple Integration' },
   ];
 
   const filteredQuestions = questions.filter((q) => {
-    if (selectedTopic !== 'ALL' && q.chapter !== selectedTopic) {
+    if (selectedTopic === 'RAPID' && q.id > 30) {
+      return false;
+    }
+    if (selectedTopic !== 'ALL' && selectedTopic !== 'RAPID' && q.chapter !== selectedTopic) {
       return false;
     }
     if (filterBookmarkOnly && !bookmarkedIds.has(q.id)) {

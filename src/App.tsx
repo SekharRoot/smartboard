@@ -44,7 +44,7 @@ export default function App() {
     }
   });
 
-  const [timeLeft, setTimeLeft] = useState<number>(settings.questionDurationSec);
+  const [timeLeft, setTimeLeft] = useState<number>(30); // Q1 starts with 30s rapid question
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   // User answers & bookmarks state
@@ -100,46 +100,63 @@ export default function App() {
     }
   }, [bookmarkedIds]);
 
+  // Dynamic durations: first 30 questions = 30s question / 15s solution; rest = 120s question / 30s solution
+  const getQuestionDuration = useCallback(
+    (qIndex: number) => {
+      return qIndex < 30 ? 30 : settings.questionDurationSec;
+    },
+    [settings.questionDurationSec]
+  );
+
+  const getSolutionDuration = useCallback(
+    (qIndex: number) => {
+      return qIndex < 30 ? 15 : settings.solutionDurationSec;
+    },
+    [settings.solutionDurationSec]
+  );
+
   // Transition to Solution view
   const goToSolution = useCallback(() => {
     setViewMode('solution');
-    setTimeLeft(settings.solutionDurationSec);
+    setTimeLeft(getSolutionDuration(currentIndex));
     if (settings.soundEnabled) {
       sounds.playTransitionChime();
     }
-  }, [settings.solutionDurationSec, settings.soundEnabled]);
+  }, [currentIndex, getSolutionDuration, settings.soundEnabled]);
 
   // Transition to Next Question
   const goToNextQuestion = useCallback(() => {
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
+      const nextIndex = currentIndex + 1;
+      setCurrentIndex(nextIndex);
       setViewMode('question');
-      setTimeLeft(settings.questionDurationSec);
+      setTimeLeft(getQuestionDuration(nextIndex));
       if (settings.soundEnabled) {
         sounds.playTransitionChime();
       }
     } else {
       setIsSummaryOpen(true);
     }
-  }, [currentIndex, questions.length, settings.questionDurationSec, settings.soundEnabled]);
+  }, [currentIndex, getQuestionDuration, questions.length, settings.soundEnabled]);
 
   // Previous Question
   const goToPrevQuestion = useCallback(() => {
     if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
+      const prevIndex = currentIndex - 1;
+      setCurrentIndex(prevIndex);
       setViewMode('question');
-      setTimeLeft(settings.questionDurationSec);
+      setTimeLeft(getQuestionDuration(prevIndex));
     }
-  }, [currentIndex, settings.questionDurationSec]);
+  }, [currentIndex, getQuestionDuration]);
 
   // Jump to specific Question
   const jumpToQuestion = useCallback((index: number) => {
     if (index >= 0 && index < questions.length) {
       setCurrentIndex(index);
       setViewMode('question');
-      setTimeLeft(settings.questionDurationSec);
+      setTimeLeft(getQuestionDuration(index));
     }
-  }, [questions.length, settings.questionDurationSec]);
+  }, [getQuestionDuration, questions.length]);
 
   // Timer Tick Mechanism
   useEffect(() => {
@@ -219,7 +236,7 @@ export default function App() {
     setBookmarkedIds(new Set());
     setCurrentIndex(0);
     setViewMode('question');
-    setTimeLeft(settings.questionDurationSec);
+    setTimeLeft(getQuestionDuration(0));
     setIsPaused(false);
   };
 
@@ -313,8 +330,8 @@ export default function App() {
         timeLeft={timeLeft}
         totalDuration={
           viewMode === 'question'
-            ? settings.questionDurationSec
-            : settings.solutionDurationSec
+            ? getQuestionDuration(currentIndex)
+            : getSolutionDuration(currentIndex)
         }
         isPaused={isPaused}
         onTogglePause={() => setIsPaused(!isPaused)}
@@ -324,6 +341,7 @@ export default function App() {
         onToggleSound={handleToggleSound}
         currentQuestionIndex={currentIndex}
         totalQuestions={questions.length}
+        difficulty={currentQuestion.difficulty}
       />
 
       {/* Main Practice Workspace */}
@@ -345,26 +363,26 @@ export default function App() {
           </button>
 
           {/* Quick chapter jumper pills */}
-          <div className="hidden sm:flex items-center space-x-1 bg-slate-200/70 p-1 rounded-xl text-xs font-medium">
+          <div className="hidden md:flex items-center space-x-1 bg-slate-200/70 p-1 rounded-xl text-xs font-medium">
             <button
               onClick={() => jumpToQuestion(0)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                currentIndex >= 0 && currentIndex < 25
+              className={`px-2.5 py-1 rounded-lg transition-all flex items-center space-x-1 ${
+                currentIndex >= 0 && currentIndex < 30
                   ? 'bg-white text-indigo-700 font-bold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Units (1–25)
+              <span>⚡ Rapid Drill (1–30)</span>
             </button>
             <button
-              onClick={() => jumpToQuestion(25)}
+              onClick={() => jumpToQuestion(30)}
               className={`px-2.5 py-1 rounded-lg transition-all ${
-                currentIndex >= 25 && currentIndex < 60
+                currentIndex >= 30 && currentIndex < 60
                   ? 'bg-white text-indigo-700 font-bold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Motion 1D (26–60)
+              Motion 1D (31–60)
             </button>
             <button
               onClick={() => jumpToQuestion(60)}

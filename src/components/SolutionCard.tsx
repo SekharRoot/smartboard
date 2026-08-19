@@ -40,6 +40,9 @@ export const SolutionCard: React.FC<SolutionCardProps> = ({
           <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
             Question #{question.id}
           </span>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+            {question.difficulty}
+          </span>
         </div>
 
         <div className="flex items-center space-x-2">

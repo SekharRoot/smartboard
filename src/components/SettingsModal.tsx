@@ -48,11 +48,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Form Body */}
         <div className="p-6 space-y-5">
-          {/* Question Timer Duration */}
+          {/* Timing Structure Notice */}
+          <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-xl p-3.5 text-xs text-indigo-950">
+            <span className="font-bold block text-sm text-indigo-900 mb-1">Dual-Pace Exam Flow Active</span>
+            <ul className="list-disc pl-4 space-y-0.5 text-indigo-800">
+              <li><strong className="font-semibold text-indigo-950">Questions 1–30 (Rapid Drill):</strong> 30s per question, 15s per solution review</li>
+              <li><strong className="font-semibold text-indigo-950">Questions 31–100 (Standard Numericals):</strong> 2 mins (or customized below) per question, 30s solution review</li>
+            </ul>
+          </div>
+
+          {/* Question Timer Duration for Q31-100 */}
           <div>
             <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-2 flex items-center">
               <Clock className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
-              Question Slide Duration
+              Standard Questions (Q31–100) Duration
             </label>
             <div className="grid grid-cols-4 gap-2">
               {[
