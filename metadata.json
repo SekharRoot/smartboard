@@ -1,0 +1,6 @@
+{
+  "name": "CBSE Class 11 Physics 100 Numericals Practice",
+  "description": "Timed numerical practice with step-by-step KaTeX solutions for CBSE Class XI Physics covering Units & Dimensions, Motion in a Straight Line, Derivatives, and Integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
