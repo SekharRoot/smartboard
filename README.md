@@ -14,11 +14,9 @@ An interactive, dual-pace numerical exam practice platform covering 100 CBSE Cla
 
 ---
 
-## 🚀 How to Upload & Deploy to GitHub Pages
+## 🚀 How to Push & Deploy to GitHub Pages
 
 ### Step 1: Initialize Git and Push to GitHub
-Run the following commands in your project root directory:
-
 ```bash
 # 1. Initialize git repository
 git init
@@ -27,25 +25,40 @@ git init
 git add .
 
 # 3. Commit your files
-git commit -m "Initial commit - CBSE Class 11 Physics 100 Numericals"
+git commit -m "Deploy CBSE Class 11 Physics App"
 
 # 4. Set main branch
 git branch -M main
 
-# 5. Link your GitHub repository (replace with your repo URL)
+# 5. Link your GitHub repository
 git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 
 # 6. Push to GitHub
 git push -u origin main
 ```
 
-### Step 2: Enable GitHub Pages in Repository Settings
-1. Go to your GitHub repository on [github.com](https://github.com).
-2. Click **Settings** (tab at the top).
-3. In the left sidebar, click **Pages**.
-4. Under **Build and deployment** > **Source**, select **GitHub Actions**.
-5. That's it! The workflow in `.github/workflows/deploy.yml` will automatically build and deploy your app.
-6. Your live web app URL will appear at the top of the Pages settings page (e.g. `https://YOUR_USERNAME.github.io/YOUR_REPOSITORY/`).
+---
+
+## 🛠️ Resolving Common GitHub Actions Deployment Errors
+
+If your GitHub Actions run fails, check these **two required GitHub settings**:
+
+### 1. Enable "GitHub Actions" as the Pages Source
+1. Open your repository on GitHub.
+2. Go to **Settings** > **Pages** (in the left sidebar).
+3. Under **Build and deployment** > **Source**, change from *Deploy from a branch* to **GitHub Actions**.
+
+### 2. Enable Workflow Read & Write Permissions
+1. In your repository, go to **Settings** > **Actions** > **General**.
+2. Scroll down to **Workflow permissions**.
+3. Select **Read and write permissions**.
+4. Check the box **Allow GitHub Actions to create and approve pull requests**.
+5. Click **Save**.
+
+### 3. Re-run Failed Jobs
+1. Go to the **Actions** tab on GitHub.
+2. Click on the latest workflow run.
+3. Click **Re-run all jobs** in the top right.
 
 ---
 
