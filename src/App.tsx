@@ -10,6 +10,13 @@ import {
   Flame,
   Volume2,
   VolumeX,
+  Maximize2,
+  Minimize2,
+  Pin,
+  PinOff,
+  ChevronDown,
+  ChevronUp,
+  Presentation,
 } from 'lucide-react';
 import { Question, ViewMode, UserAnswer, ExamSettings } from './types';
 import { allQuestions } from './data/questions';
@@ -72,6 +79,38 @@ export default function App() {
   const [isFormulaSheetOpen, setIsFormulaSheetOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState<boolean>(false);
+
+  // Auto-hide Top Navbar State (Smartboard focus mode)
+  const [autoHideNavbar, setAutoHideNavbar] = useState<boolean>(true);
+  const [isNavbarRevealed, setIsNavbarRevealed] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnterTop = () => {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    setIsNavbarRevealed(true);
+  };
+
+  const handleMouseLeaveTop = () => {
+    if (autoHideNavbar) {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = setTimeout(() => {
+        setIsNavbarRevealed(false);
+      }, 1500);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+      setIsFullscreen(false);
+    }
+  };
 
   const currentQuestion = questions[currentIndex] || questions[0];
 
@@ -245,19 +284,83 @@ export default function App() {
   const correctCount = (Object.values(userAnswers) as UserAnswer[]).filter((a) => a?.isCorrect).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-      {/* Top App Bar (Material Clean Header) */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div
+      className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between selection:bg-indigo-500 selection:text-white relative"
+      onMouseMove={(e) => {
+        if (autoHideNavbar && e.clientY <= 55) {
+          handleMouseEnterTop();
+        }
+      }}
+    >
+      {/* Top Hover Detection Zone for Auto-Hide */}
+      <div
+        className="fixed top-0 left-0 right-0 h-4 z-50 cursor-pointer"
+        onMouseEnter={handleMouseEnterTop}
+      />
+
+      {/* Slim Discreet Floating Bar when Header is Hidden */}
+      {autoHideNavbar && !isNavbarRevealed && (
+        <div
+          onMouseEnter={handleMouseEnterTop}
+          className="fixed top-2 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg border border-slate-700/60 flex items-center space-x-3 cursor-pointer hover:bg-slate-900 transition-all animate-fadeIn"
+        >
+          <div className="flex items-center space-x-1.5 text-indigo-300">
+            <Presentation className="w-3.5 h-3.5" />
+            <span>Smartboard Mode</span>
+          </div>
+          <span className="text-slate-500">|</span>
+          <button
+            onClick={() => setIsFormulaSheetOpen(true)}
+            className="hover:text-indigo-300 transition-colors flex items-center space-x-1"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Formulae</span>
+          </button>
+          <button
+            onClick={() => setIsNavDrawerOpen(true)}
+            className="hover:text-indigo-300 transition-colors flex items-center space-x-1"
+          >
+            <Grid className="w-3.5 h-3.5" />
+            <span>100 Grid</span>
+          </button>
+          <button
+            onClick={toggleFullscreen}
+            title="Toggle Fullscreen"
+            className="hover:text-amber-300 transition-colors"
+          >
+            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            onClick={() => setAutoHideNavbar(false)}
+            title="Pin Top Navbar"
+            className="text-slate-400 hover:text-white transition-colors"
+          >
+            <Pin className="w-3.5 h-3.5" />
+          </button>
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400 animate-bounce" />
+        </div>
+      )}
+
+      {/* Top App Bar with Auto-Hide Transition */}
+      <header
+        onMouseEnter={handleMouseEnterTop}
+        onMouseLeave={handleMouseLeaveTop}
+        className={`bg-white border-b border-slate-200 sticky top-0 z-40 transition-all duration-300 ease-in-out ${
+          autoHideNavbar && !isNavbarRevealed
+            ? '-translate-y-full opacity-0 pointer-events-none absolute'
+            : 'translate-y-0 opacity-100 shadow-xs'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
           {/* Logo & Title */}
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-extrabold text-base shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs">
               XI
             </div>
             <div>
-              <h1 className="font-bold text-slate-900 text-base md:text-lg leading-tight flex items-center">
+              <h1 className="font-bold text-slate-900 text-sm md:text-base leading-tight flex items-center">
                 CBSE Class 11 Physics
-                <span className="ml-2 text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md hidden sm:inline-block">
+                <span className="ml-2 text-[11px] font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md hidden sm:inline-block">
                   100 Numericals
                 </span>
               </h1>
@@ -275,7 +378,7 @@ export default function App() {
               onClick={() => setIsSummaryOpen(true)}
               className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100 transition-colors"
             >
-              <Award className="w-4 h-4 text-emerald-600" />
+              <Award className="w-3.5 h-3.5 text-emerald-600" />
               <span>
                 {correctCount}/{attemptedCount} Correct
               </span>
@@ -287,7 +390,7 @@ export default function App() {
               onClick={() => setIsFormulaSheetOpen(true)}
               className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 rounded-lg text-xs font-medium transition-colors"
             >
-              <BookOpen className="w-4 h-4 text-indigo-600" />
+              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
               <span className="hidden sm:inline">Formula Handbook</span>
             </button>
 
@@ -297,7 +400,7 @@ export default function App() {
               onClick={() => setIsScratchpadOpen(true)}
               className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 rounded-lg text-xs font-medium transition-colors"
             >
-              <Edit3 className="w-4 h-4 text-indigo-600" />
+              <Edit3 className="w-3.5 h-3.5 text-indigo-600" />
               <span className="hidden sm:inline">Scratchpad</span>
             </button>
 
@@ -307,8 +410,32 @@ export default function App() {
               onClick={() => setIsNavDrawerOpen(true)}
               className="flex items-center space-x-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
             >
-              <Grid className="w-4 h-4" />
+              <Grid className="w-3.5 h-3.5" />
               <span>100 Grid</span>
+            </button>
+
+            {/* Fullscreen Smartboard Toggle */}
+            <button
+              id="btn-toggle-fullscreen"
+              onClick={toggleFullscreen}
+              title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Presentation'}
+              className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-slate-100 transition-colors"
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
+
+            {/* Auto-Hide / Pin Toggle Button */}
+            <button
+              id="btn-toggle-pin-nav"
+              onClick={() => setAutoHideNavbar(!autoHideNavbar)}
+              title={autoHideNavbar ? 'Auto-hide active (Click to Pin)' : 'Navbar pinned (Click to Auto-hide)'}
+              className={`p-1.5 rounded-lg border transition-colors ${
+                autoHideNavbar
+                  ? 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                  : 'bg-indigo-50 text-indigo-700 border-indigo-200'
+              }`}
+            >
+              {autoHideNavbar ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
             </button>
 
             {/* Settings */}
@@ -316,7 +443,7 @@ export default function App() {
               id="btn-open-settings"
               onClick={() => setIsSettingsOpen(true)}
               title="Practice Settings"
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
             >
               <Sliders className="w-4 h-4" />
             </button>
