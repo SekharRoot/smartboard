@@ -11,7 +11,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [tool, setTool] = useState<'pen' | 'eraser'>('pen');
-  const [brushColor, setBrushColor] = useState<string>('#4f46e5');
+  const [brushColor, setBrushColor] = useState<string>('#0f172a');
   const [calcInput, setCalcInput] = useState<string>('');
   const [calcResult, setCalcResult] = useState<string>('');
   const [textNotes, setTextNotes] = useState<string>('');
@@ -138,11 +138,11 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">
               Q{questionId}
             </div>
             <div>
-              <h3 className="font-bold text-slate-800 text-base">Student Scratchpad & Calculator</h3>
+              <h3 className="font-bold text-slate-900 text-base">Student Scratchpad & Calculator</h3>
               <p className="text-xs text-slate-500">Solve numerical steps, draw diagrams & calculate</p>
             </div>
           </div>
@@ -165,10 +165,10 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
               <div className="flex items-center space-x-1.5">
                 <button
                   onClick={() => setTool('pen')}
-                  className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
+                  className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all cursor-pointer ${
                     tool === 'pen'
-                      ? 'bg-indigo-600 text-white border-indigo-700'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                      ? 'bg-slate-900 text-white border-slate-950'
+                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                   }`}
                 >
                   <Pen className="w-3.5 h-3.5" />
@@ -177,10 +177,10 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
 
                 <button
                   onClick={() => setTool('eraser')}
-                  className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
+                  className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all cursor-pointer ${
                     tool === 'eraser'
-                      ? 'bg-indigo-600 text-white border-indigo-700'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                      ? 'bg-slate-900 text-white border-slate-950'
+                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                   }`}
                 >
                   <Eraser className="w-3.5 h-3.5" />
@@ -190,12 +190,12 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
                 {/* Color swatches */}
                 {tool === 'pen' && (
                   <div className="flex items-center space-x-1 ml-2">
-                    {['#4f46e5', '#0f172a', '#e11d48', '#059669'].map((c) => (
+                    {['#0f172a', '#2563eb', '#e11d48', '#059669'].map((c) => (
                       <button
                         key={c}
                         onClick={() => setBrushColor(c)}
                         className={`w-5 h-5 rounded-full border-2 transition-transform ${
-                          brushColor === c ? 'scale-125 border-slate-800' : 'border-white'
+                          brushColor === c ? 'scale-125 border-slate-900' : 'border-white'
                         }`}
                         style={{ backgroundColor: c }}
                       />
@@ -206,7 +206,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
 
               <button
                 onClick={clearCanvas}
-                className="flex items-center space-x-1 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                className="flex items-center space-x-1 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Clear Canvas</span>
@@ -248,18 +248,18 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
                     value={calcInput}
                     onChange={(e) => setCalcInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && calculate()}
-                    className="w-full text-xs font-mono px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-indigo-500 focus:bg-white"
+                    className="w-full text-xs font-mono px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-slate-900 focus:bg-white"
                   />
                   <button
                     onClick={calculate}
-                    className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700"
+                    className="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black cursor-pointer"
                   >
                     =
                   </button>
                 </div>
 
                 {calcResult && (
-                  <div className="p-2 bg-indigo-50/80 border border-indigo-100 rounded-lg text-right font-mono font-bold text-sm text-indigo-900">
+                  <div className="p-2 bg-slate-100 border border-slate-200 rounded-lg text-right font-mono font-bold text-sm text-slate-900">
                     {calcResult}
                   </div>
                 )}
@@ -273,7 +273,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
                     <button
                       key={c.name}
                       onClick={() => copyConst(c.val, c.name)}
-                      className="text-[11px] font-mono px-2 py-1 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-md border border-slate-200 transition-colors"
+                      className="text-[11px] font-mono px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-md border border-slate-200 transition-colors cursor-pointer"
                     >
                       {copiedConst === c.name ? <Check className="w-3 h-3 text-emerald-600" /> : `${c.name}: ${c.val}`}
                     </button>
@@ -291,7 +291,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({ isOpen, onClos
                 placeholder="Type temporary calculations, given variables, or formulas..."
                 value={textNotes}
                 onChange={(e) => setTextNotes(e.target.value)}
-                className="w-full flex-1 min-h-[100px] text-xs p-3 font-mono bg-white border border-slate-200 rounded-xl focus:outline-hidden focus:border-indigo-500"
+                className="w-full flex-1 min-h-[100px] text-xs p-3 font-mono bg-white border border-slate-200 rounded-xl focus:outline-hidden focus:border-slate-900"
               />
             </div>
           </div>

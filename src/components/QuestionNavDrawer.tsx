@@ -85,13 +85,13 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
         </div>
 
         {/* Stats Strip */}
-        <div className="px-4 py-2.5 bg-indigo-50/60 border-b border-indigo-100/80 flex items-center justify-around text-xs font-medium text-slate-700">
+        <div className="px-4 py-2.5 bg-slate-100 border-b border-slate-200 flex items-center justify-around text-xs font-medium text-slate-700">
           <div className="flex items-center space-x-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span>Correct: {correctCount}</span>
           </div>
           <div className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-900"></span>
             <span>Attempted: {attemptedCount}</span>
           </div>
           <div className="flex items-center space-x-1">
@@ -110,7 +110,7 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
               placeholder="Search question # or keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-indigo-500 focus:bg-white transition-all"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-slate-900 focus:bg-white transition-all"
             />
           </div>
 
@@ -120,9 +120,9 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
               <button
                 key={t.value}
                 onClick={() => setSelectedTopic(t.value)}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
                   selectedTopic === t.value
-                    ? 'bg-indigo-600 text-white shadow-2xs'
+                    ? 'bg-slate-900 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -132,7 +132,7 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
 
             <button
               onClick={() => setFilterBookmarkOnly(!filterBookmarkOnly)}
-              className={`flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+              className={`flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
                 filterBookmarkOnly
                   ? 'bg-amber-500 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -157,15 +157,15 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
                 const answer = userAnswers[q.id];
                 const isBookmarked = bookmarkedIds.has(q.id);
 
-                let bgClass = 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300';
+                let bgClass = 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-900 hover:bg-slate-100';
                 if (answer) {
                   if (answer.isCorrect) {
-                    bgClass = 'bg-emerald-500 text-white border-emerald-600';
+                    bgClass = 'bg-emerald-600 text-white border-emerald-700';
                   } else {
                     bgClass = 'bg-rose-500 text-white border-rose-600';
                   }
                 } else if (isCurrent) {
-                  bgClass = 'bg-indigo-600 text-white border-indigo-700 font-bold ring-2 ring-indigo-300';
+                  bgClass = 'bg-slate-900 text-white border-slate-950 font-bold ring-2 ring-slate-900';
                 }
 
                 return (
@@ -176,7 +176,7 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
                       onSelectQuestion(q.id - 1);
                       onClose();
                     }}
-                    className={`relative h-11 rounded-xl text-xs font-bold flex flex-col items-center justify-center border transition-all active:scale-95 ${bgClass}`}
+                    className={`relative h-11 rounded-xl text-xs font-bold flex flex-col items-center justify-center border transition-all active:scale-95 cursor-pointer ${bgClass}`}
                   >
                     <span>Q{q.id}</span>
                     {isBookmarked && (
@@ -192,13 +192,13 @@ export const QuestionNavDrawer: React.FC<QuestionNavDrawerProps> = ({
         {/* Legend */}
         <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex flex-wrap justify-between gap-2">
           <span className="flex items-center">
-            <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 mr-1.5"></span> Correct
+            <span className="w-2.5 h-2.5 rounded-sm bg-emerald-600 mr-1.5"></span> Correct
           </span>
           <span className="flex items-center">
             <span className="w-2.5 h-2.5 rounded-sm bg-rose-500 mr-1.5"></span> Incorrect
           </span>
           <span className="flex items-center">
-            <span className="w-2.5 h-2.5 rounded-sm bg-indigo-600 mr-1.5"></span> Current
+            <span className="w-2.5 h-2.5 rounded-sm bg-slate-900 mr-1.5"></span> Current
           </span>
           <span className="flex items-center">
             <span className="w-2.5 h-2.5 rounded-sm bg-amber-400 mr-1.5"></span> Bookmark

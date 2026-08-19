@@ -65,7 +65,7 @@ export const TimerBar: React.FC<TimerBarProps> = ({
         <div className="flex items-center space-x-2.5">
           <div className="flex items-center bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg font-medium text-sm border border-slate-200">
             <span className="text-slate-500 mr-1.5 font-normal">Q</span>
-            <span className="font-bold text-indigo-600 text-base">{currentQuestionIndex + 1}</span>
+            <span className="font-bold text-slate-900 text-base">{currentQuestionIndex + 1}</span>
             <span className="text-slate-400 mx-1">/</span>
             <span className="text-slate-600">{totalQuestions}</span>
           </div>
@@ -73,8 +73,8 @@ export const TimerBar: React.FC<TimerBarProps> = ({
           <div
             className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
               isQuestionMode
-                ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                ? 'bg-slate-900 text-white border border-slate-900'
+                : 'bg-slate-100 text-slate-900 border border-slate-300'
             }`}
           >
             {isQuestionMode ? (
@@ -92,7 +92,7 @@ export const TimerBar: React.FC<TimerBarProps> = ({
 
           {/* Rapid indicator / Difficulty badge */}
           <div className={`hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold border ${getDifficultyBadge()}`}>
-            {isRapid && <Zap className="w-3 h-3 mr-1 text-teal-600 fill-teal-500" />}
+            {isRapid && <Zap className="w-3 h-3 mr-1 text-amber-600 fill-amber-500" />}
             <span>{difficulty}</span>
           </div>
         </div>
@@ -104,8 +104,8 @@ export const TimerBar: React.FC<TimerBarProps> = ({
               isUrgent
                 ? 'bg-rose-50 text-rose-600 border border-rose-200 animate-pulse'
                 : isQuestionMode
-                ? isRapid ? 'bg-indigo-50 text-indigo-900 border border-indigo-100' : 'bg-slate-100 text-slate-800'
-                : 'bg-emerald-100/70 text-emerald-800'
+                ? isRapid ? 'bg-slate-900 text-white border border-slate-900 shadow-xs' : 'bg-slate-100 text-slate-900 border border-slate-200'
+                : 'bg-slate-100 text-slate-900 border border-slate-200'
             }`}
           >
             <span>{formattedTime}</span>
@@ -121,7 +121,7 @@ export const TimerBar: React.FC<TimerBarProps> = ({
             id="btn-timer-pause"
             onClick={onTogglePause}
             title={isPaused ? 'Resume Timer' : 'Pause Timer'}
-            className="p-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 active:scale-95 transition-all"
+            className="p-2 rounded-lg text-slate-700 hover:text-black hover:bg-slate-100 active:scale-95 transition-all"
           >
             {isPaused ? <Play className="w-5 h-5 fill-current" /> : <Pause className="w-5 h-5" />}
           </button>
@@ -130,7 +130,7 @@ export const TimerBar: React.FC<TimerBarProps> = ({
             id="btn-timer-add30"
             onClick={onAdd30Secs}
             title="Add 30 seconds"
-            className="flex items-center text-xs font-medium text-slate-600 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 border border-slate-200 px-2.5 py-1.5 rounded-lg active:scale-95 transition-all"
+            className="flex items-center text-xs font-semibold text-slate-800 hover:text-black bg-slate-100 hover:bg-slate-200 border border-slate-300 px-2.5 py-1.5 rounded-lg active:scale-95 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 mr-0.5" />
             30s
@@ -143,19 +143,15 @@ export const TimerBar: React.FC<TimerBarProps> = ({
             id="btn-toggle-sound"
             onClick={onToggleSound}
             title={soundEnabled ? 'Mute Chimes' : 'Enable Chimes'}
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-all"
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-all"
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-slate-700" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
           </button>
 
           <button
             id="btn-advance-slide"
             onClick={onAdvance}
-            className={`flex items-center font-medium text-sm px-3.5 py-1.5 rounded-lg shadow-xs active:scale-95 transition-all ${
-              isQuestionMode
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-            }`}
+            className="flex items-center font-bold text-sm px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white shadow-xs active:scale-95 transition-all cursor-pointer"
           >
             <span>{isQuestionMode ? 'View Solution' : 'Next Problem'}</span>
             <SkipForward className="w-4 h-4 ml-1.5" />
@@ -169,9 +165,7 @@ export const TimerBar: React.FC<TimerBarProps> = ({
           className={`h-full transition-all duration-300 ${
             isUrgent
               ? 'bg-rose-500'
-              : isQuestionMode
-              ? isRapid ? 'bg-teal-500' : 'bg-indigo-600'
-              : 'bg-emerald-500'
+              : 'bg-slate-900'
           }`}
           style={{ width: `${progressPercent}%` }}
         />

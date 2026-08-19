@@ -4,12 +4,67 @@ import { questionsSet2 } from './questionsSet2';
 import { questionsSet3 } from './questionsSet3';
 import { questionsSet4 } from './questionsSet4';
 
-export const allQuestions: Question[] = [
+const rawQuestions: Question[] = [
   ...questionsSet1,
   ...questionsSet2,
   ...questionsSet3,
   ...questionsSet4,
 ];
+
+// Helper to evenly randomize and distribute options and correct answers across A, B, C, D
+function randomizeQuestionOptions(q: Question): Question {
+  // 1. Identify the correct answer text
+  const currentCorrect = q.options.find((o) => o.label === q.correctOption);
+  const correctText = currentCorrect ? currentCorrect.text : q.finalAnswer;
+
+  // 2. Extract option texts
+  const otherTexts = q.options
+    .map((o) => o.text)
+    .filter((txt) => txt !== correctText);
+
+  // If options were duplicated or missing, fill
+  while (otherTexts.length < 3) {
+    otherTexts.push(`Option ${otherTexts.length + 1}`);
+  }
+
+  // Shuffle incorrect option texts pseudo-randomly using question id
+  const shuffledDistractors = [...otherTexts.slice(0, 3)];
+  const seed = (q.id * 17 + 11) % 100;
+  if (seed % 2 === 0) {
+    shuffledDistractors.reverse();
+  }
+  if (seed % 3 === 0) {
+    [shuffledDistractors[0], shuffledDistractors[1]] = [shuffledDistractors[1], shuffledDistractors[0]];
+  }
+
+  // 3. Target position for correct option: evenly distributed across A, B, C, D (0, 1, 2, 3)
+  // Maps: Q1->C, Q2->A, Q3->D, Q4->B, Q5->C, Q6->A, etc.
+  const targetIndex = (q.id * 3 + 2) % 4;
+
+  const finalOptionsTexts: string[] = [];
+  let distractorIdx = 0;
+  for (let i = 0; i < 4; i++) {
+    if (i === targetIndex) {
+      finalOptionsTexts.push(correctText);
+    } else {
+      finalOptionsTexts.push(shuffledDistractors[distractorIdx++] || otherTexts[0]);
+    }
+  }
+
+  const labels: ('A' | 'B' | 'C' | 'D')[] = ['A', 'B', 'C', 'D'];
+  const newOptions = finalOptionsTexts.map((text, idx) => ({
+    label: labels[idx],
+    text,
+  }));
+
+  return {
+    ...q,
+    options: newOptions,
+    correctOption: labels[targetIndex],
+  };
+}
+
+export const allQuestions: Question[] = rawQuestions.map(randomizeQuestionOptions);
 
 export interface FormulaItem {
   name: string;

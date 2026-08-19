@@ -39,7 +39,7 @@ export const FormulaSheetModal: React.FC<FormulaSheetModalProps> = ({ isOpen, on
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
@@ -63,9 +63,9 @@ export const FormulaSheetModal: React.FC<FormulaSheetModalProps> = ({ isOpen, on
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setActiveTab('ALL')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'ALL'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-slate-900 text-white shadow-2xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -75,9 +75,9 @@ export const FormulaSheetModal: React.FC<FormulaSheetModalProps> = ({ isOpen, on
               <button
                 key={s.chapter}
                 onClick={() => setActiveTab(s.chapter)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === s.chapter
-                    ? 'bg-indigo-600 text-white shadow-2xs'
+                    ? 'bg-slate-900 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -94,7 +94,7 @@ export const FormulaSheetModal: React.FC<FormulaSheetModalProps> = ({ isOpen, on
               placeholder="Search formula..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-indigo-500 focus:bg-white"
+              className="w-full pl-9 pr-3 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:border-slate-900 focus:bg-white"
             />
           </div>
         </div>
